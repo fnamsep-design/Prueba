@@ -5,6 +5,34 @@
   <title>Xfurtherme Studios</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
   <style>
+  
+  #fondo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1; /* queda atrás de todo */
+  background: black;
+}
+  
+  #music-btn {
+  background: linear-gradient(to bottom, #939493, #000000);
+  color: white;
+  padding: 12px 20px;
+  border: 2px solid white;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 0 10px #fff3;
+  transition: transform 0.2s, background 0.3s;
+  margin-top: 20px;
+}
+
+#music-btn:hover {
+  background: linear-gradient(to bottom, #AEACAC, #422A2A);
+  transform: scale(1.05);
+}
+  
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -92,7 +120,7 @@
 }
 
 .boton:hover {
-  background: linear-gradient(to bottom, #AEACAC, #422A2A);
+  background: linear-gradient(to bottom, #AEACAC, #422A37);
   transform: scale(1.05);
 }
 
@@ -109,6 +137,103 @@
   }
 }
 
+  </style>
+</head>
+
+<script src="main.js"></script>
+
+<body> 
+
+<canvas id="fondo"></canvas>
+
+<audio id="bg-music" loop>
+  <source src="musica.mp3" type="audio/mpeg">
+  Tu navegador no soporta audio en HTML5.
+</audio>
+
+<button id="music-btn">🎵 Reproducir Música</button>
+
+<script>
+  const music = document.getElementById("bg-music");
+  const btn = document.getElementById("music-btn");
+
+  btn.addEventListener("click", () => {
+    if (music.paused) {
+      music.play();
+      btn.textContent = "⏸️ Pausar Música";
+    } else {
+      music.pause();
+      btn.textContent = "🎵 Reproducir Música";
+    }
+  });
+</script>
+
+<div class="logo">
+    <img src="logo.png" alt="Mi Logo" />
+  </div>  <div class="nombre-logo">
+    <span style="font-size: 1.6em;">Xfurtherme</span>
+    <span style="font-size: 1.1em;">Studios </span>
+  </div>  <div class="descripcion">
+!Bienvenidos a Xfurtherme Studios¡.
+Aquí creo y comparto mis proyectos con pasión y estilo y ideas locas de programación, este es mi espacio para explorar, aprender y mostrar al mundo quién soy.
+¿Listo We? 😎
+  </div>  <div class="botones">
+    <p>Suscribite no seas malo >:[</p>
+    <a href="https://youtube.com/@xfurtherme?si=WmuWRhOZiXloHkSe" target="_blank" class="boton">Mi canal de YouTube</a>
+    <p>Aqui mis proyectos Gente "BETA"</p>
+  <a href="mis%20proyectos.html" class="boton">Ver mis Proyectos</a>
+  <p>Contactame si necesitas algo o una sugerencia :D</p>
+    <a href="mailto: pmoi09962@gmail.com" class="boton">Contáctame por Gmail</a>
+  </div>  <div class="footer">
+    © 2025 Xfurtherme Studios. Todos los derechos reservados.
+  </div>
+  
+  <script>
+const canvas = document.getElementById("fondo");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+// crear partículas
+for (let i = 0; i < 100; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    radius: Math.random() * 2 + 1,
+    dx: (Math.random() - 0.5) * 0.5,
+    dy: (Math.random() - 0.5) * 0.5
+  });
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fill();
+    p.x += p.dx;
+    p.y += p.dy;
+
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  });
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+// redimensionar con la ventana
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+  
+  </body>
+</html>
   </style>
 </head>
 
