@@ -1,0 +1,132 @@
+/* Estilo mejorado para Xfurtherme Studios */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 0 30px #00f7ff55;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.logo {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 20px #fff;
+  border: 3px solid #00f7ff;
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.titulo {
+  font-size: 2rem;
+  color: #00f7ff;
+  margin-bottom: 15px;
+  text-shadow: 0 0 5px #00f7ff, 0 0 10px #007f99;
+}
+
+.descripcion {
+  font-size: 1rem;
+  margin-bottom: 30px;
+  color: #ccc;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.boton {
+  text-decoration: none;
+  background: linear-gradient(90deg, #00f7ff, #007f99);
+  color: black;
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px #00f7ff77;
+}
+
+.boton:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #007f99, #00f7ff);
+  box-shadow: 0 0 20px #00f7ffaa;
+}
+
+.proyectos {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.proyecto {
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 0 15px #00f7ff22;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.proyecto:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 25px #00f7ff55;
+}
+
+.proyecto h2 {
+  color: #00f7ff;
+  margin-bottom: 10px;
+}
+
+.proyecto p {
+  color: #ddd;
+  font-size: 0.95rem;
+}
+
+.footer {
+  font-size: 0.8rem;
+  color: #888;
+  border-top: 1px solid #333;
+  padding-top: 15px;
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+  .menu {
+    gap: 10px;
+  }
+  .proyecto {
+    padding: 15px;
+  }
+}

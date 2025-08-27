@@ -1,0 +1,31 @@
+window.addEventListener('DOMContentLoaded', () => {
+  const saludo = document.createElement('div');
+  saludo.innerText = '¡Bienvenidos a Xfurtherme Studios! ❄️✨';
+  saludo.style.position = 'fixed';
+  saludo.style.top = '20px';
+  saludo.style.left = '50%';
+  saludo.style.transform = 'translateX(-50%)';
+  saludo.style.background = '#ffffff';
+  saludo.style.color = '#000000';
+  saludo.style.padding = '12px 24px';
+  saludo.style.borderRadius = '10px';
+  saludo.style.boxShadow = '0 0 20px #ffffff80';
+  saludo.style.zIndex = '9999';
+  saludo.style.fontSize = '1rem';
+  saludo.style.opacity = '0';
+  saludo.style.transition = 'opacity 1s ease';
+
+  document.body.appendChild(saludo);
+
+  setTimeout(() => {
+    saludo.style.opacity = '1';
+  }, 300);
+
+  setTimeout(() => {
+    saludo.style.opacity = '0';
+  }, 4000);
+
+  setTimeout(() => {
+    saludo.remove();
+  }, 5000);
+});

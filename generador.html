@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Contraseñas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #2c2c2c, #000);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .container {
+      background: #1a1a1a;
+      padding: 200px;
+      border-radius: 150px;
+      box-shadow: 0 0 60px #fff4;
+      text-align: center;
+    }
+    input, button {
+      padding: 20px;
+      margin: 5px;
+      border-radius: 10px;
+      border: none;
+    }
+    button {
+      background: #444;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #666;
+    }
+    .resultado {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #0094FF;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 Generador de Contraseñas🔐</h1>
+    <label>¿Cuántos caracteres? </label>
+    <input type="number" id="longitud" value="10" min="4" max="32"><br>
+    
+    <label><input type="checkbox" id="usarLetras" checked> Incluir letras</label><br>
+    <label><input type="checkbox" id="usarNumeros" checked> Incluir números</label><br>
+    <label><input type="checkbox" id="usarSimbolos"> Incluir símbolos</label><br><br>
+    
+    <button onclick="generar()">Generar</button>
+    <div class="resultado" id="resultado"></div>
+  </div>
+
+  <script>
+    function generar() {
+      const longitud = document.getElementById("longitud").value;
+      const usarLetras = document.getElementById("usarLetras").checked;
+      const usarNumeros = document.getElementById("usarNumeros").checked;
+      const usarSimbolos = document.getElementById("usarSimbolos").checked;
+
+      let caracteres = "";
+      if (usarLetras) caracteres += "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      if (usarNumeros) caracteres += "0123456789";
+      if (usarSimbolos) caracteres += "!@#$%^&*()_-+=<>?/{}[]";
+
+      if (caracteres === "") {
+        document.getElementById("resultado").innerText = "⚠️ Debes elegir al menos una opción.";
+        return;
+      }
+
+      let password = "";
+      for (let i = 0; i < longitud; i++) {
+        const randomIndex = Math.floor(Math.random() * caracteres.length);
+        password += caracteres[randomIndex];
+      }
+
+      document.getElementById("resultado").innerText = "Tu contraseña: " + password;
+    }
+  </script>
+  
+    </div>  <div class="footer">
+    <p>© 2025 Xfurtherme Studios. Todos los derechos reservados.</p>
+    <p>Todo esto no se le publicara a terceros, es totalmente seguro 🤍</p>
+    <p><a href="index.html">Volver al inicio</a></p>
+    </div>
+</body>
+</html>

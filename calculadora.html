@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora v5</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      background: linear-gradient(-45deg, #336D6D, #000000, #0582FF, #848484);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .calc {
+      background: rgba(20, 20, 30, 0.9);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+      width: 360px;
+      backdrop-filter: blur(6px);
+      margin-bottom: 20px;
+    }
+
+    .display {
+      background: #000;
+      color: #0ff;
+      font-size: 2rem;
+      text-align: right;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      box-shadow: inset 0 0 10px rgba(0,255,255,0.4);
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      padding: 16px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 10px;
+      background: #111;
+      color: #0ff;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 0 8px rgba(0,255,255,0.2);
+    }
+    button:hover {
+      background: #0ff;
+      color: #111;
+      box-shadow: 0 0 15px #0ff;
+    }
+
+    .btn-op { color: #f0f; }
+    .btn-clear { background: #f33; color: #fff; grid-column: span 2; }
+    .btn-back { background: #f90; color: #fff; }
+    .btn-eq { background: #06f; color: #fff; grid-column: span 2; }
+
+    footer {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .back-btn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      background: #0ff;
+      color: #111;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .back-btn:hover {
+      background: #06f;
+      color: #fff;
+      box-shadow: 0 0 10px #06f;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc">
+    <div id="display" class="display">0</div>
+    <div class="buttons">
+      <button class="btn-clear" onclick="clearDisplay()">C</button>
+      <button class="btn-back" onclick="backspace()">⌫</button>
+      <button class="btn-op" onclick="percent()">% de</button>
+      <button class="btn-op" onclick="appendOp('/')">÷</button>
+      
+      <button onclick="appendNum(7)">7</button>
+      <button onclick="appendNum(8)">8</button>
+      <button onclick="appendNum(9)">9</button>
+      <button class="btn-op" onclick="appendOp('*')">×</button>
+      
+      <button onclick="appendNum(4)">4</button>
+      <button onclick="appendNum(5)">5</button>
+      <button onclick="appendNum(6)">6</button>
+      <button class="btn-op" onclick="appendOp('-')">−</button>
+      
+      <button onclick="appendNum(1)">1</button>
+      <button onclick="appendNum(2)">2</button>
+      <button onclick="appendNum(3)">3</button>
+      <button class="btn-op" onclick="appendOp('+')">+</button>
+      
+      <button onclick="appendNum(0)">0</button>
+      <button onclick="appendOp('.')">.</button>
+      <button class="btn-op" onclick="squareRoot()">√</button>
+      <button class="btn-op" onclick="power()">x²</button>
+
+      <button class="btn-op" onclick="powerY()">xʸ</button>
+      <button class="btn-op" onclick="factorial()">n!</button>
+      <button class="btn-eq" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <button class="back-btn" onclick="window.location.href='index.html'">⬅️ Volver al inicio</button>
+  <footer>
+    © 2025 Xfurtherme. Todos los derechos reservados.
+  </footer>
+
+  <script>
+    let display = document.getElementById("display");
+
+    function appendNum(num) {
+      if (display.textContent === "0" || display.textContent === "Error") {
+        display.textContent = num;
+      } else {
+        display.textContent += num;
+      }
+    }
+
+    function appendOp(op) {
+      display.textContent += op;
+    }
+
+    function clearDisplay() {
+      display.textContent = "0";
+    }
+
+    function backspace() {
+      display.textContent = display.textContent.slice(0, -1) || "0";
+    }
+
+    function squareRoot() {
+      try {
+        let value = eval(display.textContent);
+        if (value < 0) display.textContent = "Error";
+        else display.textContent = Math.sqrt(value);
+      } catch { display.textContent = "Error"; }
+    }
+
+    function power() {
+      try {
+        let value = eval(display.textContent);
+        display.textContent = Math.pow(value, 2);
+      } catch { display.textContent = "Error"; }
+    }
+
+    function powerY() {
+      try {
+        let base = prompt("Base:");
+        let exp = prompt("Exponente:");
+        if (base !== null && exp !== null) {
+          display.textContent = Math.pow(parseFloat(base), parseFloat(exp));
+        }
+      } catch { display.textContent = "Error"; }
+    }
+
+    function factorial() {
+      try {
+        let n = eval(display.textContent);
+        if (n < 0 || !Number.isInteger(n)) {
+          display.textContent = "Error";
+          return;
+        }
+        let fact = 1;
+        for (let i = 1; i <= n; i++) fact *= i;
+        display.textContent = fact;
+      } catch { display.textContent = "Error"; }
+    }
+
+    function percent() {
+      try {
+        let porcentaje = prompt("¿Qué porcentaje?");
+        let total = eval(display.textContent);
+        display.textContent = (parseFloat(porcentaje) / 100) * total;
+      } catch { display.textContent = "Error"; }
+    }
+
+    function calculate() {
+      try {
+        let result = eval(display.textContent);
+        display.textContent = result;
+      } catch { display.textContent = "Error"; }
+    }
+  </script>
+</body>
+</html>

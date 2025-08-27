@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juego del Gatito 🐱</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      background: linear-gradient(-45deg, #0ff, #06f, #f0f, #f33);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .game-btn {
+      margin-top: 20px;
+      padding: 12px 25px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 12px;
+      background: #0ff;
+      color: #111;
+      cursor: pointer;
+      box-shadow: 0 0 12px #0ff;
+      transition: 0.2s;
+    }
+    .game-btn:hover {
+      background: #06f;
+      color: #fff;
+      box-shadow: 0 0 18px #06f;
+    }
+
+    #gameCanvas {
+      display: none;
+      margin-top: 20px;
+      border: 3px solid #0ff;
+      border-radius: 15px;
+      background: linear-gradient(#222, #444);
+    }
+
+    #scoreboard {
+      display: none;
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: #ff3;
+      text-shadow: 0 0 8px #000;
+    }
+
+    #gameOverMsg {
+      display: none;
+      margin-top: 15px;
+      font-size: 1.1rem;
+      color: #ff3;
+      text-shadow: 0 0 8px #000;
+      text-align: center;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐾 Juego del Gatito</h1>
+  <button class="game-btn" onclick="iniciarJuego()">🎮 Jugar</button>
+  <canvas id="gameCanvas"></canvas>
+  <div id="scoreboard">Puntos: 0 | Récord: 0</div>
+  <div id="gameOverMsg"></div>
+
+  <button class="game-btn" onclick="window.location.href='index.html'">⬅️ Volver al inicio</button>
+
+  <footer>© 2025 TuNombre</footer>
+
+  <!-- 🎵 Música de fondo -->
+  <audio autoplay loop>
+    <source src="musica.mp3" type="audio/mpeg">
+    Tu navegador no soporta el audio.
+  </audio>
+
+<script>
+  let canvas = document.getElementById("gameCanvas");
+  let ctx = canvas.getContext("2d");
+
+  let gatito = new Image();
+  gatito.src = "gatito.png"; // 👉 tu PNG aquí
+
+  let y, velocidad, jugando, puntos, obstaculos, record;
+  let gravedad = 0.5;   // caída más natural
+  let salto = -8;       // fuerza del salto
+  let gatitoSize = 60;
+  let x = 60;
+
+  function resizeCanvas() {
+    canvas.width = Math.min(window.innerWidth * 0.8, 400);
+    canvas.height = Math.min(window.innerHeight * 0.6, 500);
+  }
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  function iniciarJuego() {
+    document.getElementById("gameOverMsg").style.display = "none";
+    document.getElementById("scoreboard").style.display = "block";
+    canvas.style.display = "block";
+
+    jugando = true;
+    y = canvas.height / 2;
+    velocidad = 0;
+    puntos = 0;
+    obstaculos = [];
+    record = localStorage.getItem("recordGatito") || 0;
+    actualizarPuntos();
+    loop();
+  }
+
+  // clic → salto
+  canvas.addEventListener("click", () => {
+    if (jugando) {
+      velocidad = salto;
+    }
+  });
+
+  function actualizarPuntos() {
+    document.getElementById("scoreboard").innerText =
+      `Puntos: ${puntos} | Récord: ${record}`;
+  }
+
+  function crearObstaculo() {
+    let espacio = 130;
+    let altura = Math.floor(Math.random() * (canvas.height - espacio - 50)) + 20;
+    obstaculos.push({
+      x: canvas.width,
+      y: altura,
+      width: 50,
+      espacio: espacio,
+      contado: false // para no sumar puntos varias veces
+    });
+  }
+
+  function loop() {
+    if (!jugando) return;
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    // física
+    velocidad += gravedad;
+    y += velocidad;
+
+    // gatito inclinado
+    ctx.save();
+    ctx.translate(x + gatitoSize/2, y + gatitoSize/2);
+    ctx.rotate(velocidad * 0.05);
+    ctx.drawImage(gatito, -gatitoSize/2, -gatitoSize/2, gatitoSize, gatitoSize);
+    ctx.restore();
+
+    // obstáculos
+    if (Math.random() < 0.02) {
+      crearObstaculo();
+    }
+
+    for (let i = obstaculos.length - 1; i >= 0; i--) {
+      let o = obstaculos[i];
+      o.x -= 2;
+
+      ctx.fillStyle = "#0ff";
+      ctx.fillRect(o.x, 0, o.width, o.y);
+      ctx.fillRect(o.x, o.y + o.espacio, o.width, canvas.height - (o.y + o.espacio));
+
+      // colisión
+      if (x < o.x + o.width && x + gatitoSize > o.x &&
+          (y < o.y || y + gatitoSize > o.y + o.espacio)) {
+        finDelJuego();
+        return;
+      }
+
+      // sumar puntos si el gatito pasa el obstáculo
+      if (!o.contado && o.x + o.width < x) {
+        puntos++;
+        o.contado = true;
+        actualizarPuntos();
+      }
+
+      // limpiar obstáculos viejos
+      if (o.x + o.width < 0) {
+        obstaculos.splice(i, 1);
+      }
+    }
+
+    // si toca suelo o techo
+    if (y > canvas.height - gatitoSize || y < 0) {
+      finDelJuego();
+      return;
+    }
+
+    requestAnimationFrame(loop);
+  }
+
+  function finDelJuego() {
+    jugando = false;
+    canvas.style.display = "none";
+
+    if (puntos > record) {
+      record = puntos;
+      localStorage.setItem("recordGatito", record);
+    }
+
+    let msg = document.getElementById("gameOverMsg");
+    msg.innerHTML = `😿 ¡El gatito perdió! <br> Puntos: ${puntos} <br> Récord: ${record} <br>
+      <button class='game-btn' onclick='iniciarJuego()'>Jugar de nuevo</button>`;
+    msg.style.display = "block";
+  }
+</script>
+
+</body>
+</html>
